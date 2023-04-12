@@ -1,7 +1,25 @@
-const User = require("../models/user.model");
+const UserModel = require("../models/user.model");
+const {
+  isValidEmail,
+  isValidPhoneNumber,
+} = require("../validators/validators");
 
 validateUserRequestBody = async (req, res, next) => {
-  //Validating the userName
+  if (!req.body.userId) {
+    res.status(400).send({
+      message: "Failed! UserId is not provided !",
+    });
+    return;
+  }
+  //Validating the userId
+  const user = await UserModel.findOne({ userId: req.body.userId });
+  if (user != null) {
+    res.status(400).send({
+      message: "Failed! Userid  already exists!",
+    });
+    return;
+  }
+
   if (!req.body.firstName) {
     res.status(400).send({
       message: "Failed! FirstName is not provided !",
@@ -23,7 +41,7 @@ validateUserRequestBody = async (req, res, next) => {
     return;
   }
 
-  const email = await User.findOne({ email: req.body.email });
+  const email = await UserModel.findOne({ email: req.body.email });
   if (email != null) {
     res.status(400).send({
       message: "Try any other email, this email is already registered!",
@@ -31,7 +49,7 @@ validateUserRequestBody = async (req, res, next) => {
     return;
   }
 
-  if (!isValidNumber(req.body.contactNumber)) {
+  if (!isValidPhoneNumber(req.body.contactNumber)) {
     res.status(400).send({
       message: "Invalid contact number!",
     });
@@ -66,16 +84,4 @@ const validateUserSigninBody = function (req, res, next) {
 module.exports = {
   validateUserRequestBody,
   validateUserSigninBody,
-};
-
-//validators
-
-const isValidEmail = (email) => {
-  return String(email)
-    .toLowerCase()
-    .match(/^[\w.-]+@[a-zA-Z0-9]+\.[a-z]{2,6}$/);
-};
-
-const isValidNumber = (number) => {
-  return String(number).match(/^\d{10}$/);
 };

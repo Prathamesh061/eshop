@@ -5,6 +5,7 @@ const authConfig = require("../configs/auth.config");
 
 exports.signup = async (req, res) => {
   const userObj = {
+    userId: req.body.userId,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
@@ -48,13 +49,13 @@ exports.signin = async (req, res) => {
 
   if (!passwordIsValid) {
     return res.status(401).send({
-      accessToken: null,
       message: "Invalid Credentials!",
     });
   }
   const token = jwt.sign(
     {
-      username: user.firstName + " " + user.lastName,
+      id: user.id,
+      userId: user.userId,
       role: user.role,
       createdAt: user.createdAt,
     },

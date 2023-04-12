@@ -3,6 +3,10 @@ const constants = require("../utils/constants");
 
 const eshopUserSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -28,6 +32,7 @@ const eshopUserSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
