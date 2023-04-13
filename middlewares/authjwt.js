@@ -41,7 +41,20 @@ const isAdmin = async (req, res, next) => {
     return;
   }
 };
+
+const isUser = async (req, res, next) => {
+  if (req.role === constants.userRole.user) {
+    next();
+  } else {
+    res.status(403).send({
+      message: "You are not authorised to access this endpoint!",
+    });
+    return;
+  }
+};
+
 module.exports = {
   verifyToken,
   isAdmin,
+  isUser,
 };

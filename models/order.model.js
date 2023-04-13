@@ -1,28 +1,32 @@
 const mongoose = require("mongoose");
 
 const eshopOrderSchema = new mongoose.Schema({
+  quantity: {
+    type: Number,
+    required: true,
+  },
   amount: {
     type: Number,
     required: true,
   },
-  order_date: {
+  orderDate: {
     type: Date,
+    default: () => Date.now(),
+  },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Eshop_product",
     required: true,
   },
-  product_product_id: {
+  shippingAddressId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "eshop_product",
+    ref: "Eshop_shipping_address",
     required: true,
   },
-  shipping_address_id: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "eshop_shipping_address",
+    ref: "Eshop_user",
     required: true,
-  },
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "eshop_user",
-    required: true, 
   },
 });
 
