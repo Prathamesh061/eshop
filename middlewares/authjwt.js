@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const config = require("../configs/auth.config.js");
+const constants = require("../utils/constants.js");
 
 const verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
@@ -18,10 +19,22 @@ const verifyToken = (req, res, next) => {
     }
     req.userId = decoded.userId;
     req.id = decoded.id;
+    req.role = decoded.role;
     next();
   });
 };
 
+const isAdmin = async (req, res, next) => {
+  if (req.role === constants.userRole.admin) {
+    next();
+  } else {
+    res.status(403).send({
+      message: "Require Admin Role!",
+    });
+    return;
+  }
+};
 module.exports = {
   verifyToken,
+  isAdmin,
 };

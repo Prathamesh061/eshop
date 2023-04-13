@@ -39,6 +39,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 require("./routes/auth.routes")(app);
 require("./routes/shippingAddress.routes")(app);
+require("./routes/product.routes")(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

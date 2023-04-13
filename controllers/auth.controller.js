@@ -57,7 +57,6 @@ exports.signin = async (req, res) => {
       id: user.id,
       userId: user.userId,
       role: user.role,
-      createdAt: user.createdAt,
     },
     authConfig.secret,
     {
