@@ -34,6 +34,13 @@ validateUserRequestBody = async (req, res, next) => {
   }
 
   //Validating the email Id
+  if (!req.body.email) {
+    res.status(400).send({
+      message: "Failed! Email is not provided !",
+    });
+    return;
+  }
+
   if (!isValidEmail(req.body.email)) {
     res.status(400).send({
       message: "Invalid email-id format!",

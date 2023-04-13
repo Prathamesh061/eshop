@@ -67,7 +67,6 @@ exports.signin = async (req, res) => {
   res.status(200).send({
     email: user.email,
     name: user.firstName + " " + user.lastName,
-    isAuthenticated: true,
     "x-auth-token": token,
   });
 };
