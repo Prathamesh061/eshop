@@ -116,3 +116,83 @@ exports.getCategories = async (req, res) => {
     });
   }
 };
+
+exports.searchProducts = async (req, res) => {
+  try {
+    const {
+      category = "",
+      direction = "DESC",
+      name = "",
+      sortBy = "_id",
+      pageNo = 1,
+      pageSize = 5,
+    } = req.query;
+
+    const skip = (pageNo - 1) * pageSize;
+
+    const products = await ProductModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { category: { $regex: category, $options: "i" } },
+            { name: { $regex: name, $options: "i" } },
+          ],
+        },
+      },
+      {
+        $sort: { [sortBy]: direction === "ASC" ? 1 : -1 },
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: parseInt(pageSize),
+      },
+    ]);
+
+    const totalProducts = await ProductModel.find({
+      $and: [
+        { category: { $regex: category, $options: "i" } },
+        { name: { $regex: name, $options: "i" } },
+      ],
+    }).countDocuments();
+
+    const totalPages = Math.ceil(totalProducts / pageSize);
+
+    const response = {
+      content: products,
+      pageable: {
+        sort: {
+          sorted: true,
+          unsorted: false,
+          empty: false,
+        },
+        offset: skip,
+        pageNumber: parseInt(pageNo),
+        pageSize: parseInt(pageSize),
+        unpaged: false,
+        paged: true,
+      },
+      totalPages: totalPages,
+      totalElements: totalProducts,
+      last: parseInt(pageNo) === totalPages,
+      size: parseInt(pageSize),
+      number: parseInt(pageNo),
+      sort: {
+        sorted: true,
+        unsorted: false,
+        empty: false,
+      },
+      numberOfElements: products.length,
+      first: parseInt(pageNo) === 1,
+      empty: products.length === 0,
+    };
+
+    res.status(200).send(response);
+  } catch (err) {
+    console.log("Some error while fetching products in db", err.message);
+    res.status(500).send({
+      message: "Some internal error while fetching products",
+    });
+  }
+};

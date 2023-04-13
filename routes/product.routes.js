@@ -26,8 +26,8 @@ module.exports = (app) => {
     productController.deleteProduct
   );
 
-  app.get("/eshop/api/v1/products");
-  
+  app.get("/eshop/api/v1/products", productController.searchProducts);
+
   app.get("/eshop/api/v1/products/categories", productController.getCategories);
 
   app.get(
