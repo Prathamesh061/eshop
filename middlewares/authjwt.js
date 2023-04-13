@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../configs/auth.config.js");
 const constants = require("../utils/constants.js");
+const validator = require("validator");
 
 const verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
@@ -8,6 +9,12 @@ const verifyToken = (req, res, next) => {
   if (!token) {
     return res.status(403).send({
       message: "Please login first to access this endpoint!", // No token provided
+    });
+  }
+
+  if (!validator.isJWT(token)) {
+    return res.status(400).send({
+      message: "Failed! Invalid JSONWebToken",
     });
   }
 
@@ -29,7 +36,7 @@ const isAdmin = async (req, res, next) => {
     next();
   } else {
     res.status(403).send({
-      message: "Require Admin Role!",
+      message: "You are not authorised to access this endpoint!",
     });
     return;
   }

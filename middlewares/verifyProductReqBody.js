@@ -75,6 +75,40 @@ const validateProductReqBody = async (req, res, next) => {
   next();
 };
 
+const validateProductUpdateBody = (req, res, next) => {
+  if (!validator.isMongoId(req.params.productId)) {
+    return res.status(400).send({
+      message: "Failed! Invalid productId",
+    });
+  }
+  if (
+    req.body.availableItems !== undefined &&
+    isNaN(+req.body.availableItems)
+  ) {
+    res.status(400).send({
+      message: "Failed! AvailableItems is invalid",
+    });
+    return;
+  }
+
+  if (req.body.price !== undefined && isNaN(+req.body.price)) {
+    res.status(400).send({
+      message: "Failed! Price is invalid",
+    });
+    return;
+  }
+
+  if (req.body.imageUrl && !validator.isURL(req.body.imageUrl)) {
+    res.status(400).send({
+      message: "Failed! ImageUrl is invalid",
+    });
+    return;
+  }
+
+  next();
+};
+
 module.exports = {
   validateProductReqBody,
+  validateProductUpdateBody,
 };
