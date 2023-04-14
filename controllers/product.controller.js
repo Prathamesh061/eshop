@@ -158,6 +158,22 @@ exports.searchProducts = async (req, res) => {
       {
         $limit: parseInt(pageSize),
       },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          availableItems: 1,
+          price: {
+            $toString: "$price",
+          },
+          category: 1,
+          description: 1,
+          imageUrl: 1,
+          manufacturer: 1,
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
     ]);
 
     // The function counts the total number of documents matching the category and name query parameters
