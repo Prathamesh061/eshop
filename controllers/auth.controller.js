@@ -1,9 +1,12 @@
+// Importing necessary modules
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authConfig = require("../configs/auth.config");
 
+// Exporting functions
 exports.signup = async (req, res) => {
+  // Create a user object with data from the request body
   const userObj = {
     userId: req.body.userId,
     firstName: req.body.firstName,
@@ -14,8 +17,10 @@ exports.signup = async (req, res) => {
   };
 
   try {
+    // Create a new user record in the database using the user object
     const userCreated = await User.create(userObj);
 
+    // Construct a response object with selected user properties
     const postResponse = {
       _id: userCreated.id,
       firstName: userCreated.firstName,
@@ -33,10 +38,10 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  //Fetch the user based on the userId
-  //Validating the userId
+  /// Fetch the user record based on the email
   const user = await User.findOne({ email: req.body.email });
 
+  // Check if the user exists
   if (user == null) {
     res.status(400).send({
       message: "This email has not been registered!",
@@ -52,6 +57,8 @@ exports.signin = async (req, res) => {
       message: "Invalid Credentials!",
     });
   }
+
+  // If the email and password are valid, create a JWT token
   const token = jwt.sign(
     {
       id: user.id,
@@ -64,6 +71,7 @@ exports.signin = async (req, res) => {
     }
   );
 
+  // Construct a response object with selected user properties and the JWT token
   res.status(200).send({
     email: user.email,
     name: user.firstName + " " + user.lastName,

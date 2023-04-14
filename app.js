@@ -1,3 +1,4 @@
+// Require necessary packages
 require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
@@ -10,12 +11,14 @@ const mongoose = require("mongoose");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
+// Create Express app instance
 const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
+// Use middleware
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,6 +38,7 @@ db.once("open", () => {
   console.log("connected to Mongo DB ");
 });
 
+// Use routers
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 require("./routes/auth.routes")(app);
