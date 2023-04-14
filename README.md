@@ -1,6 +1,6 @@
 # eshop
 
-The project at developing from scratch REST API endpoints of various functionalities required for the web app Eshop. The application will interact with and store the data in the MongoDB database. Also, the project has to be implemented using Express.js and Node.js.
+The project is aimed at developing from scratch REST API endpoints of various functionalities required for the web app Eshop. The application will interact with and store the data in the MongoDB database. Also, the project has to be implemented using Express.js and Node.js.
 
 
 ## Configuration 
